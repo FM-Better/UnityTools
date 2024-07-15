@@ -8,7 +8,7 @@ namespace EditorTool
         [MenuItem("Tool/Path/打开PersistentDataPath路径")]
         public static void OpenpersistentDataPath()
         {
-            Application.OpenURL(Application.persistentDataPath);
+            EditorUtility.RevealInFinder(Application.persistentDataPath);
         }
     }   
 }
