@@ -6,7 +6,7 @@ namespace EditorTool
 {
     public class RenameTool : EditorWindow
     {
-        [MenuItem("Tool/Rename Tool")]
+        [MenuItem("Tool/Rename Tool %&R")]
         public static void CreateWindow()
         {
             var windowRect = new Rect(0, 0, 500, 500);
@@ -15,9 +15,11 @@ namespace EditorTool
         }
         
         private string _prefix = "";
+        private bool _isRetain = false;
         private string _name = "";
         private string _suffix = "";
         private int _id = 1;
+        private bool _isSingle = false;
         private string _format = "";
         
         private int _selectedNum;
@@ -45,10 +47,19 @@ namespace EditorTool
             GUILayout.Space(10);
             
             _prefix = EditorGUILayout.TextField("前缀：", _prefix);
-            _name = EditorGUILayout.TextField("名称：", _name);
+            _isRetain = EditorGUILayout.ToggleLeft("是否保留原名", _isRetain);
+            
+            if (!_isRetain) // 不保留才需要输入名称
+                _name = EditorGUILayout.TextField("名称：", _name);
+            
             _suffix = EditorGUILayout.TextField("后缀：", _suffix);
-            _id = EditorGUILayout.IntField("起始ID：", _id);
-            _format = EditorGUILayout.TextField("ID格式化标准：", _format);
+            _isSingle = EditorGUILayout.ToggleLeft("是否单个物体", _isSingle);
+            
+            if (!_isSingle) // 多个才需要输入ID相关
+            {
+                _id = EditorGUILayout.IntField("起始ID：", _id);
+                _format = EditorGUILayout.TextField("ID格式化标准：", _format);    
+            }
             
             GUILayout.Space(10);
             
@@ -77,7 +88,7 @@ namespace EditorTool
         
         private void Rename()
         {
-            if (_name.Length == 0 || _name.Trim().Length == 0)
+            if (!_isRetain && (_name.Length == 0 || _name.Trim().Length == 0))
             {
                 Debug.LogError("名称为空");
                 return;
@@ -86,11 +97,19 @@ namespace EditorTool
             foreach (var asset in Selection.objects)
             {
                 var path = AssetDatabase.GetAssetPath(asset);
-                var newName = $"{_name}_{_id.ToString(_format)}";
+                var newName = asset.name;
+                if (!_isRetain)
+                {
+                    newName = _name;
+                }
+                if (!_isSingle)
+                {
+                    newName = $"{_name}_{_id.ToString(_format)}";    
+                }
         
                 var prefix = _prefix.Trim(); // 前缀 去除空白部分
                 if (prefix.Length > 0)
-                    newName = $"{_prefix}_{newName}";
+                    newName = $"{prefix}_{newName}";
                 
                 var suffix = _suffix.Trim(); // 后缀 去除空白部分
                 if (suffix.Length > 0)
