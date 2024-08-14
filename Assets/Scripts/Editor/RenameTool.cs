@@ -34,34 +34,38 @@ namespace EditorTool
             GUI.skin.label.fontSize = 24;
             GUI.skin.label.alignment = TextAnchor.MiddleCenter;
             GUILayout.Label("Rename Tool");
-            GUI.skin.label.fontSize = 24;
-            GUI.skin.label.alignment = TextAnchor.MiddleLeft;
-            GUI.color = Color.white;
             
             GUILayout.Space(20);
             #endregion
-            
+
+            #region Selection Tip
+            GUI.color = Color.white;
             GUI.skin.label.fontSize = 20;
+            GUI.skin.label.alignment = TextAnchor.MiddleLeft;
             GUILayout.Label($"当前选择{_selectedNum}个物体");
             
             GUILayout.Space(10);
+            #endregion
+            
             
             _prefix = EditorGUILayout.TextField("前缀：", _prefix);
             _isRetain = EditorGUILayout.ToggleLeft("是否保留原名", _isRetain);
-            
             if (!_isRetain) // 不保留才需要输入名称
+            {
                 _name = EditorGUILayout.TextField("名称：", _name);
-            
+            }
             _suffix = EditorGUILayout.TextField("后缀：", _suffix);
-            _isSingle = EditorGUILayout.ToggleLeft("是否单个物体", _isSingle);
             
+            GUILayout.Space(10);
+            
+            _isSingle = EditorGUILayout.ToggleLeft("是否单个物体", _isSingle);
             if (!_isSingle) // 多个才需要输入ID相关
             {
                 _id = EditorGUILayout.IntField("起始ID：", _id);
                 _format = EditorGUILayout.TextField("ID格式化标准：", _format);    
             }
             
-            GUILayout.Space(10);
+            GUILayout.Space(20);
             
             if (Selection.objects.Length <= 0)
             {
@@ -127,7 +131,7 @@ namespace EditorTool
                     AssetDatabase.Refresh();
                 }
         
-                _id++;
+                _id++; // id递增
             }
         }
     }    
