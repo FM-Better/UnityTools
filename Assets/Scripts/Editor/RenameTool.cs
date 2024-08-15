@@ -79,8 +79,6 @@ namespace EditorTool
                     _currentScenePath = SceneManager.GetActiveScene().path;
                     
                     Rename();
-                
-                    _id = 1;    
                 }
             }
         }
@@ -128,11 +126,12 @@ namespace EditorTool
                 {
                     AssetDatabase.RenameAsset(path, newName);
                     AssetDatabase.SaveAssets();
-                    AssetDatabase.Refresh();
                 }
         
                 _id++; // id递增
             }
+            
+            AssetDatabase.Refresh(); // 刷新Project窗口
         }
     }    
 }
