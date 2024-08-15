@@ -5,6 +5,17 @@ namespace Utility
     public static class ColorUtil
     {
         /// <summary>
+        /// 返回16进制字符串对应的颜色
+        /// </summary>
+        /// <param name="hexColor"> 颜色对应的16进制字符串 </param>
+        /// <returns></returns>
+        public static Color HexToColor(string hexColor)
+        {
+            ColorUtility.TryParseHtmlString(hexColor, out var color);
+            return color;
+        }
+        
+        /// <summary>
         /// 双线性插值 (利用归一化坐标采样贴图对应颜色 x、y：0~1
         /// </summary>
         /// <param name="x"> 对应贴图的横坐标值 </param>
