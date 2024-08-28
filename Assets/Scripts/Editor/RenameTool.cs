@@ -25,6 +25,11 @@ namespace EditorTool
         private int _selectedNum;
         private string _currentScenePath;
 
+        private void OnEnable()
+        {
+            _selectedNum = Selection.objects.Length;
+        }
+        
         private void OnGUI()
         {
             #region Tool Title
