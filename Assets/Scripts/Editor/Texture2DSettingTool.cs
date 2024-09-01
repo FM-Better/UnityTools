@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace EditorToolKit
+namespace EditorTool
 {
     public class Texture2DSettingTool : EditorWindow
     {
@@ -110,14 +110,14 @@ namespace EditorToolKit
                     var importer = AssetImporter.GetAtPath(assetPath);
                     var textureImporter = importer as TextureImporter;
 
-                    if (textureImporter) // 获取Texture2D 进行设置
+                    if (textureImporter)
                     {
-                        textureImporter.textureType = _textureImporterType; // 设置图片类型
-                        textureImporter.alphaIsTransparency = true; // 将 Alpha 通道视为透明度
-                        textureImporter.mipmapEnabled = false; // 禁用mipmap
+                        textureImporter.textureType = _textureImporterType;
+                        textureImporter.alphaIsTransparency = true;
+                        textureImporter.mipmapEnabled = false;
                         textureImporter.wrapMode = TextureWrapMode.Clamp;
                         textureImporter.filterMode = FilterMode.Bilinear;
-                        textureImporter.textureCompression = TextureImporterCompression.Compressed; // 使用压缩
+                        textureImporter.textureCompression = TextureImporterCompression.Compressed;
                         textureImporter.compressionQuality = 100;
                         
                         AssetDatabase.ImportAsset(assetPath);
