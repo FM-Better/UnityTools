@@ -1,15 +1,34 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(PolygonCollider2D)), CanEditMultipleObjects]
 public class PolygonCollider2DTool : Editor
 {
+    private Editor _baseEditor;
     private float _radius;
-    
+
+    private void OnEnable()
+    {
+        EditorCoroutineUtility.StartCoroutineOwnerless(Cor_CreateBaseEditor());
+    }
+
+    private IEnumerator Cor_CreateBaseEditor()
+    {
+        var type = Assembly.GetAssembly(typeof(Editor)).GetType("UnityEditor.PolygonCollider2DEditor", false); // 根据反射获取基类Editor
+        yield return new WaitUntil(() => type != null);
+        _baseEditor = CreateEditor(target, type);
+    }
+
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
+        if (!_baseEditor) // 未获取到基类Editor 则推出
+            return;
+        
+        _baseEditor.OnInspectorGUI();
 
         _radius = EditorGUILayout.FloatField("Radius", _radius);
         
