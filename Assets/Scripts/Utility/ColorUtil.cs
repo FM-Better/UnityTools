@@ -8,7 +8,7 @@ namespace Utility
         /// 返回16进制字符串对应的颜色
         /// </summary>
         /// <param name="hexColor"> 颜色对应的16进制字符串 </param>
-        /// <returns></returns>
+        /// <returns> 对应的颜色 </returns>
         public static Color HexToColor(string hexColor)
         {
             ColorUtility.TryParseHtmlString(hexColor, out var color);
@@ -21,7 +21,7 @@ namespace Utility
         /// <param name="x"> 对应贴图的横坐标值 </param>
         /// <param name="y"> 对应贴图的纵坐标值 </param>
         /// <param name="dstTexture"> 采样的目标贴图 </param>
-        /// <returns></returns>
+        /// <returns> 采样得到的颜色 </returns>
         private static Color BilinearInterpolation(float x, float y, Texture2D dstTexture)
         {
             var x1 = Mathf.Clamp(Mathf.FloorToInt(x * dstTexture.width), 0, dstTexture.width - 1);
@@ -41,6 +41,28 @@ namespace Utility
             var bottom = Color.Lerp(c01, c11, s);
 
             return Color.Lerp(top, bottom, t);
+        }
+        
+        /// <summary>
+        /// 创建纯色纹理
+        /// </summary>
+        /// <param name="width"> 纹理宽度 </param>
+        /// <param name="height"> 纹理高度 </param>
+        /// <param name="color"> 纹理颜色 </param>
+        /// <returns> 创建出的纹理 </returns>
+        public static Texture2D CreatePureColorTexture2D(int width, int height, Color color)
+        {
+            var pix = new Color[width * height];
+            for (int i = 0; i < pix.Length; i++)
+            {
+                pix[i] = color;
+            }
+            
+            var result = new Texture2D(width, height);
+            result.SetPixels(pix);
+            result.Apply();
+            
+            return result;
         }
     }
 }
