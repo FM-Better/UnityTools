@@ -30,11 +30,11 @@ namespace Utility
                 if (!hasCrossed) // 还未进行叉乘
                 {
                     hasCrossed = true;
-                    firstCrossResult = crossSign == 1 ? true : false;
+                    firstCrossResult = crossSign == 1;
                 }
                 else
                 {
-                    var nowResult = crossSign == 1 ? true : false;
+                    var nowResult = crossSign == 1;
                     if (firstCrossResult != nowResult) // 若和第一次的结果不一致 则说明不在凸多边形内
                         return false;
                 }
