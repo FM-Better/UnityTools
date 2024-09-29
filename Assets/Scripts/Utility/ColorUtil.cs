@@ -16,6 +16,13 @@ namespace Utility
         }
 
         /// <summary>
+        /// 返回颜色对应大写的16进制字符串
+        /// </summary>
+        /// <param name="color"> 16进制字符串对应的颜色 </param>
+        /// <returns> 对应的16进制字符串 </returns>
+        public static string ColorToHex(Color color) => $"#{ColorUtility.ToHtmlStringRGB(color)}";
+
+        /// <summary>
         /// 双线性插值 (利用uv坐标采样颜色
         /// </summary>
         /// <param name="u"> 贴图u坐标 </param>
