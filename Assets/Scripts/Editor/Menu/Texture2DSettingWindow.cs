@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace EditorTool
 {
-    public class Texture2DSettingTool : EditorWindow
+    public class Texture2DSettingWindow : EditorWindow
     {
-        [MenuItem("Tool/Texture2D Setting Tool %&S")]
+        [MenuItem("Tool/Texture2D Setting Window %&S")]
         public static void CreateWindow()
         {
             var windowRect = new Rect(0, 0, 500, 500);
-            var window = GetWindowWithRect(typeof(Texture2DSettingTool), windowRect, false, "Texture2D Setting Tool");
+            var window = GetWindowWithRect(typeof(Texture2DSettingWindow), windowRect, false, "Texture2D Setting Window");
             window.Show();
         }
 
@@ -31,7 +31,7 @@ namespace EditorTool
             GUI.color = Color.yellow;
             GUI.skin.label.fontSize = 24;
             GUI.skin.label.alignment = TextAnchor.MiddleCenter;
-            GUILayout.Label("Texture2D Setting Tool");
+            GUILayout.Label("Texture2D Setting Window");
             GUI.skin.label.fontSize = 24;
             GUI.skin.label.alignment = TextAnchor.MiddleLeft;
             GUI.color = Color.white;

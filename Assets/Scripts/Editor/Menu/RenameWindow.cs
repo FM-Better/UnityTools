@@ -4,13 +4,13 @@ using UnityEngine.SceneManagement;
 
 namespace EditorTool
 {
-    public class RenameTool : EditorWindow
+    public class RenameWindow : EditorWindow
     {
-        [MenuItem("Tool/Rename Tool %&R")]
+        [MenuItem("Tool/Rename Window %&R")]
         public static void CreateWindow()
         {
             var windowRect = new Rect(0, 0, 500, 500);
-            var window = GetWindowWithRect(typeof(RenameTool), windowRect, false, "Rename Tool");
+            var window = GetWindowWithRect(typeof(RenameWindow), windowRect, false, "Rename Window");
             window.Show();
         }
         
@@ -38,7 +38,7 @@ namespace EditorTool
             GUI.color = Color.yellow;
             GUI.skin.label.fontSize = 24;
             GUI.skin.label.alignment = TextAnchor.MiddleCenter;
-            GUILayout.Label("Rename Tool");
+            GUILayout.Label("Rename Window");
             
             GUILayout.Space(20);
             #endregion

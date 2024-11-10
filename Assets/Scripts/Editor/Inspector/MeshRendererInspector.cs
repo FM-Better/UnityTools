@@ -4,18 +4,20 @@ using UnityEngine;
 namespace EditorTool
 {
     [CustomEditor(typeof(MeshRenderer))]
-    public class MeshRendererTool : Editor
+    public class MeshRendererInspector : Editor
     {
         private MeshRenderer _meshRenderer;
 
         private string[] _sortingLayerNameArray;
-        private int _sortingLayerID;
+        private int _sortingLayerIndex;
         private int _sortingOrder;
 
         private void OnEnable()
         {
             serializedObject.Update();
 
+            _meshRenderer = (MeshRenderer)target;
+            
             _sortingLayerNameArray = new string[SortingLayer.layers.Length];
 
             var layers = SortingLayer.layers;
@@ -23,11 +25,12 @@ namespace EditorTool
             for (int i = 0; i < layers.Length; i++)
             {
                 _sortingLayerNameArray[i] = layers[i].name;
+                if (layers[i].name == _meshRenderer.sortingLayerName)
+                {
+                    _sortingLayerIndex = i; 
+                }
             }
 
-            _meshRenderer = (MeshRenderer)target;
-
-            _sortingLayerID = _meshRenderer.sortingLayerID;
             _sortingOrder = _meshRenderer.sortingOrder;
 
             serializedObject.ApplyModifiedProperties();
@@ -50,10 +53,10 @@ namespace EditorTool
         private void DrawSortingAbout()
         {
             EditorGUI.BeginChangeCheck();
-            _sortingLayerID = EditorGUILayout.Popup("Sorting Layer", _sortingLayerID, _sortingLayerNameArray);
+            _sortingLayerIndex = EditorGUILayout.Popup("Sorting Layer", _sortingLayerIndex, _sortingLayerNameArray);
             if (EditorGUI.EndChangeCheck())
             {
-                _meshRenderer.sortingLayerID = _sortingLayerID;
+                _meshRenderer.sortingLayerID = SortingLayer.NameToID(_sortingLayerNameArray[_sortingLayerIndex]);
             }
 
             EditorGUI.BeginChangeCheck();
