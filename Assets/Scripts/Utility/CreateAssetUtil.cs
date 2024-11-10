@@ -6,6 +6,8 @@ namespace Utility
 {
     public static class CreateAssetUtil
     {
+#if UNITY_EDITOR
+        
         /// <summary>
         /// 创建Texture2D
         /// </summary>
@@ -46,5 +48,7 @@ namespace Utility
                 
             Object.DestroyImmediate(dstTexture2D); // 删除创建的贴图 释放内存
         }
+        
+#endif
     }
 }
