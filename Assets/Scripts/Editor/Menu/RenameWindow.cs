@@ -14,15 +14,15 @@ namespace EditorTool
             window.Show();
         }
         
+        private bool _isRetain;
+        private bool _withoutID;
+        private int _id = 1;
+        private int _selectedNum;
+        
         private string _prefix = "";
-        private bool _isRetain = false;
         private string _name = "";
         private string _suffix = "";
-        private int _id = 1;
-        private bool _isSingle = false;
         private string _format = "";
-        
-        private int _selectedNum;
         private string _currentScenePath;
 
         private void OnEnable()
@@ -52,7 +52,6 @@ namespace EditorTool
             GUILayout.Space(10);
             #endregion
             
-            
             _prefix = EditorGUILayout.TextField("前缀：", _prefix);
             _isRetain = EditorGUILayout.ToggleLeft("是否保留原名", _isRetain);
             if (!_isRetain) // 不保留才需要输入名称
@@ -63,8 +62,8 @@ namespace EditorTool
             
             GUILayout.Space(10);
             
-            _isSingle = EditorGUILayout.ToggleLeft("是否单个物体", _isSingle);
-            if (!_isSingle) // 多个才需要输入ID相关
+            _withoutID = EditorGUILayout.ToggleLeft("是否去掉ID", _withoutID);
+            if (!_withoutID) // 不去掉ID 才显示ID相关输入
             {
                 _id = EditorGUILayout.IntField("起始ID：", _id);
                 _format = EditorGUILayout.TextField("ID格式化标准：", _format);    
@@ -109,18 +108,23 @@ namespace EditorTool
                 {
                     newName = _name;
                 }
-                if (!_isSingle)
-                {
-                    newName = $"{_name}_{_id.ToString(_format)}";    
-                }
-        
+                
                 var prefix = _prefix.Trim(); // 前缀 去除空白部分
                 if (prefix.Length > 0)
+                {
                     newName = $"{prefix}_{newName}";
+                }
                 
                 var suffix = _suffix.Trim(); // 后缀 去除空白部分
                 if (suffix.Length > 0)
+                {
                     newName = $"{newName}_{suffix}";
+                }
+                
+                if (!_withoutID)
+                {
+                    newName = $"{newName}_{_id.ToString(_format)}";    
+                }
         
                 if (asset is GameObject && !AssetDatabase.Contains(asset)) // 若为GameObject 且 不存在Asset中 则为场景物体
                 {
