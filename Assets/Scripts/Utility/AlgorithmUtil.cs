@@ -87,12 +87,14 @@ namespace Utility
         }
 
         #endregion
+
+        #region Sort 排序平面上的点
         
         /// <summary>
-        /// 将一组平面上的点 根据原点 按照顺时针方向排序
+        /// 将平面上的点 根据原点 按照顺时针方向排序
         /// </summary>
-        /// <param name="points"> 要排序的点的列表 </param>
-        /// <returns> 返回排序后的点的列表 </returns>
+        /// <param name="points"> 待排序的点的列表 </param>
+        /// <returns> 返回排序后的点 </returns>
         public static List<Vector2> SortPointsByClockwise(List<Vector2> points)
         {
             points.Sort((p1, p2) =>
@@ -173,9 +175,9 @@ namespace Utility
         }
 
         /// <summary>
-        /// 将一组平面上的点 根据原点 按照顺时针方向排序
+        /// 将平面上的点 根据原点 按照顺时针方向排序
         /// </summary>
-        /// <param name="points"> 要排序的点的列表 </param>
+        /// <param name="points"> 待排序的点 </param>
         public static void SortPointsByClockwise(ref List<Vector2> points)
         {
             points.Sort((p1, p2) =>
@@ -252,5 +254,84 @@ namespace Utility
                 }
             });
         }
+        
+        #endregion
+
+        #region Sort 按照Renderer的渲染顺序进行排序游戏物体
+        
+        /// <summary>
+        /// 将游戏物体 按照Renderer的渲染顺序 由近到远进行排序
+        /// </summary>
+        /// <param name="gameObjects"> 待排序的游戏物体 </param>
+        /// <returns> 排序后的游戏物体 </returns>
+        public static List<GameObject> SortGameObjectByRenderQueue(List<GameObject> gameObjects)
+        {
+            gameObjects.Sort((leftGameObject, rightGameObject) =>
+            {
+                var leftRenderer = leftGameObject.GetComponent<Renderer>();
+                var rightRenderer = rightGameObject.GetComponent<Renderer>();
+
+                if (!leftRenderer)
+                {
+                    DebugUtil.LogWarning($"{leftGameObject.name} Don't have renderer");
+                    return -1;
+                }
+
+                if (!rightGameObject)
+                {
+                    DebugUtil.LogWarning($"{rightGameObject.name} Don't have renderer");
+                    return 1;
+                }
+                
+                var leftLayerValue = SortingLayer.GetLayerValueFromID(leftRenderer.sortingLayerID);
+                var rightLayerValue = SortingLayer.GetLayerValueFromID(rightRenderer.sortingLayerID);
+                var leftSortingOrder = leftRenderer.sortingOrder;
+                var rightSortingOrder = rightRenderer.sortingOrder;
+
+                return leftLayerValue > rightLayerValue ? -1 :
+                    leftLayerValue < rightLayerValue ? 1 :
+                    leftSortingOrder > rightSortingOrder ? -1 :
+                    leftSortingOrder < rightSortingOrder ? 1 : 0;
+            });
+
+            return gameObjects;
+        }
+        
+        /// <summary>
+        /// 将游戏物体  按照Renderer的渲染顺序 由近到远进行排序
+        /// </summary>
+        /// <param name="gameObjects"> 待排序的游戏物体 </param>
+        public static void SortGameObjectByRenderQueue(ref List<GameObject> gameObjects)
+        {
+            gameObjects.Sort((leftGameObject, rightGameObject) =>
+            {
+                var leftRenderer = leftGameObject.GetComponent<Renderer>();
+                var rightRenderer = rightGameObject.GetComponent<Renderer>();
+
+                if (!leftRenderer)
+                {
+                    DebugUtil.LogWarning($"{leftGameObject.name} Don't have renderer");
+                    return -1;
+                }
+
+                if (!rightGameObject)
+                {
+                    DebugUtil.LogWarning($"{rightGameObject.name} Don't have renderer");
+                    return 1;
+                }
+
+                var leftLayerValue = SortingLayer.GetLayerValueFromID(leftRenderer.sortingLayerID);
+                var rightLayerValue = SortingLayer.GetLayerValueFromID(rightRenderer.sortingLayerID);
+                var leftSortingOrder = leftRenderer.sortingOrder;
+                var rightSortingOrder = rightRenderer.sortingOrder;
+
+                return leftLayerValue > rightLayerValue ? -1 :
+                    leftLayerValue < rightLayerValue ? 1 :
+                    leftSortingOrder > rightSortingOrder ? -1 :
+                    leftSortingOrder < rightSortingOrder ? 1 : 0;
+            });
+        }
+        
+        #endregion
     }
 }
