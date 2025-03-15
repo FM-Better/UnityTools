@@ -21,7 +21,7 @@ Shader "Unlit/BrightnessSaturationAndContrast"
 
             struct v2f
             {
-                float2 uv : TEXCOORD0;
+                half2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
             };
 
