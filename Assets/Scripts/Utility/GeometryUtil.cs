@@ -202,5 +202,56 @@ namespace Utility
         }
 
         #endregion
+
+        #region Bounds相关
+
+        /// <summary>
+        /// 获取目标渲染器在屏幕空间的包围盒 (默认为主相机下的视角坐标
+        /// </summary>
+        /// <param name="targetRenderer"> 目标渲染器 </param>
+        /// <returns></returns>
+        public static Bounds GetScreenSpaceBounds(Renderer targetRenderer)
+        {
+            var bounds = targetRenderer.bounds;
+    
+            // 获取包围盒的8个顶点世界坐标
+            var worldCorners = new Vector3[8];
+            var boundsMin = bounds.min;
+            var boundsMax = bounds.max;
+
+            // 标准立方体顶点顺序：从底面逆时针，然后顶面逆时针
+            // 底面四个顶点（从min开始逆时针）
+            worldCorners[0] = new Vector3(boundsMin.x, boundsMin.y, boundsMin.z); // 底面-左后下
+            worldCorners[1] = new Vector3(boundsMax.x, boundsMin.y, boundsMin.z); // 底面-右后下
+            worldCorners[2] = new Vector3(boundsMax.x, boundsMin.y, boundsMax.z); // 底面-右前下
+            worldCorners[3] = new Vector3(boundsMin.x, boundsMin.y, boundsMax.z); // 底面-左前下
+
+            // 顶面四个顶点（对应底面顶点垂直上方）
+            worldCorners[4] = new Vector3(boundsMin.x, boundsMax.y, boundsMin.z); // 顶面-左后上
+            worldCorners[5] = new Vector3(boundsMax.x, boundsMax.y, boundsMin.z); // 顶面-右后上
+            worldCorners[6] = new Vector3(boundsMax.x, boundsMax.y, boundsMax.z); // 顶面-右前上
+            worldCorners[7] = new Vector3(boundsMin.x, boundsMax.y, boundsMax.z); // 顶面-左前上
+
+            // 转换为视口坐标(UV空间)
+            var min = new Vector2(1, 1);
+            var max = new Vector2(0, 0);
+            foreach (var corner in worldCorners)
+            {
+                var viewportPos = Camera.main.WorldToViewportPoint(corner);
+                // 剔除在摄像机背后的点
+                if (viewportPos.z < 0) continue; 
+        
+                min = Vector2.Min(min, viewportPos);
+                max = Vector2.Max(max, viewportPos);
+            }
+        
+            // 钳制在屏幕范围内
+            min = Vector2.Max(min, Vector2.zero);
+            max = Vector2.Min(max, Vector2.one);
+        
+            return new Bounds((min + max) * 0.5f, max - min);
+        }
+
+        #endregion
     }
 }
