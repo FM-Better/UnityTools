@@ -42,7 +42,8 @@ namespace EditorTool
             if (GUILayout.Button("生成枚举类"))
             {
                 var files = Directory.GetFiles(_folderPath, ".", SearchOption.AllDirectories)
-                    .Where(s => s.EndsWith(".wav") || s.EndsWith(".mp3")).ToArray(); // 获取文件夹下的所有文件
+                    .Where(s => s.EndsWith(".wav", StringComparison.OrdinalIgnoreCase) ||
+                                s.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase)).ToArray(); // 获取文件夹下的所有文件(忽略后缀的大小写
                 _generatedEnumContent = $"//生成于：{DateTime.Now.ToString()}\n";
                 for (int i = 0; i < files.Length; i++)
                 {
